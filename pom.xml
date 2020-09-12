@@ -8,5 +8,65 @@
     <artifactId>cayenne-note-project</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <cayenne.version>4.2.M1</cayenne.version>
+        <mysql.version>8.0.20</mysql.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.cayenne</groupId>
+            <artifactId>cayenne-server</artifactId>
+            <version>${cayenne.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.cayenne.plugins</groupId>
+                <artifactId>cayenne-maven-plugin</artifactId>
+                <version>${cayenne.version}</version>
+                <configuration>
+                    <dataSource>
+                        <driver>com.mysql.jdbc.Driver</driver>
+                        <url>jdbc:mysql://127.0.0.1:3306/cars_demo</url> <!-- Set your database url -->
+                        <username>root</username> <!-- Set your username -->
+                        <password>root</password> <!-- Set your password -->
+                    </dataSource>
+                    <cayenneProject>${project.basedir}/src/main/resources/cayenne/cayenne-project.xml</cayenneProject>
+                    <map>${project.basedir}/src/main/resources/cayenne/datamap.map.xml</map>
+                    <dbImport>
+                        <defaultPackage>cayenne.note.project.model</defaultPackage>
+                        <catalog>cars_demo</catalog>
+                    </dbImport>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/10/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/10/modelMap https://cayenne.apache.org/schema/10/modelMap.xsd"
+	 project-version="10">
+	<property name="defaultPackage" value="cayenne.note.project.model"/>
+	<property name="defaultCatalog" value="cars_demo"/>
+	<db-entity name="car_brand" catalog="cars_demo">
+		<db-attribute name="COUNTRY" type="VARCHAR" length="200"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="NAME" type="VARCHAR" length="200"/>
+	</db-entity>
+	<db-entity name="car_model" catalog="cars_demo">
+		<db-attribute name="CAR_BRAND_ID" type="INTEGER" length="10"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+		<db-attribute name="NAME" type="VARCHAR" length="200"/>
+	</db-entity>
+	<db-entity name="feedback" catalog="cars_demo">
+		<db-attribute name="CAR_MODEL_ID" type="INTEGER" length="10"/>
+		<db-attribute name="FEEDBACK" type="VARCHAR" length="200"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isGenerated="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<obj-entity name="CarBrand" className="cayenne.note.project.model.CarBrand" dbEntityName="car_brand">
+		<obj-attribute name="country" type="java.lang.String" db-attribute-path="COUNTRY"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="NAME"/>
+	</obj-entity>
+	<obj-entity name="CarModel" className="cayenne.note.project.model.CarModel" dbEntityName="car_model">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="NAME"/>
+	</obj-entity>
+	<obj-entity name="Feedback" className="cayenne.note.project.model.Feedback" dbEntityName="feedback">
+		<obj-attribute name="feedback" type="java.lang.String" db-attribute-path="FEEDBACK"/>
+	</obj-entity>
+	<db-relationship name="carModels" source="car_brand" target="car_model" toMany="true">
+		<db-attribute-pair source="ID" target="CAR_BRAND_ID"/>
+	</db-relationship>
+	<db-relationship name="carBrand" source="car_model" target="car_brand">
+		<db-attribute-pair source="CAR_BRAND_ID" target="ID"/>
+	</db-relationship>
+	<db-relationship name="feedbacks" source="car_model" target="feedback" toMany="true">
+		<db-attribute-pair source="ID" target="CAR_MODEL_ID"/>
+	</db-relationship>
+	<db-relationship name="carModel" source="feedback" target="car_model">
+		<db-attribute-pair source="CAR_MODEL_ID" target="ID"/>
+	</db-relationship>
+	<obj-relationship name="carModels" source="CarBrand" target="CarModel" deleteRule="Deny" db-relationship-path="carModels"/>
+	<obj-relationship name="carBrand" source="CarModel" target="CarBrand" deleteRule="Nullify" db-relationship-path="carBrand"/>
+	<obj-relationship name="feedbacks" source="CarModel" target="Feedback" deleteRule="Deny" db-relationship-path="feedbacks"/>
+	<obj-relationship name="carModel" source="Feedback" target="CarModel" deleteRule="Nullify" db-relationship-path="carModel"/>
+</data-map>
